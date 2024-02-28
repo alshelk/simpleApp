@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0-$(date +%s) --tag cr.yandex/crplm04uob96qchf7ht4/my_app:latest
+
+    - name: Docker login
+      run: cat ${{ secrets.YC_SERVICE_ACCOUNT }} | docker login --username json_key --password-stdin cr.yandex
+
+    - name: Publish image
+      run: docker push cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0 cr.yandex/crplm04uob96qchf7ht4/my_app:latest  
