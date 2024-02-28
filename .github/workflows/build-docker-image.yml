@@ -21,4 +21,6 @@ jobs:
       run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
 
     - name: Publish image
-      run: docker push cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0 cr.yandex/crplm04uob96qchf7ht4/my_app:latest  
+      run: | 
+        docker push cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0 
+        docker push cr.yandex/crplm04uob96qchf7ht4/my_app:latest  
