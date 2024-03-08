@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0 --tag cr.yandex/crplm04uob96qchf7ht4/my_app:latest
+      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:0.1.0 --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
     - name: Docker login
       run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
