@@ -25,5 +25,5 @@ jobs:
 
     - name: Publish image
       run: | 
-        docker push cr.yandex/crplm04uob96qchf7ht4/my_app:0.1.0 
-        docker push cr.yandex/crplm04uob96qchf7ht4/my_app:latest  
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:0.1.0 
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
