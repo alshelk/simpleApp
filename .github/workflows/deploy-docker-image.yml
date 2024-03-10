@@ -2,7 +2,8 @@ name: Deploy Docker Image CI
 
 on:
   push:
-    # tags: [ "v*.*.*" ]
+    tags: 
+      - v*.*.*
 
 jobs:
   build:
