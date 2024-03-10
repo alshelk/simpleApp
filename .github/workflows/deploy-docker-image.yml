@@ -13,14 +13,14 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:$env:GITHUB_REF_NAME --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:$GITHUB_REF_NAME --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
       
     - name: Docker login
       run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
 
     - name: Publish image
       run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:$env:GITHUB_REF_NAME 
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:$GITHUB_REF_NAME 
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
     - name: Deploy
