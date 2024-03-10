@@ -22,7 +22,8 @@ jobs:
         fallback: v1.0.0
    
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-${{ steps.previoustag.outputs.timestamp }} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-${{ steps.previoustag.outputs.timestamp }} 
+      # --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
     - name: Docker list image
       run: docker image ls
@@ -31,6 +32,5 @@ jobs:
       run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
 
     - name: Publish image
-      run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-${{ steps.previoustag.outputs.timestamp }} 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+      run: docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-${{ steps.previoustag.outputs.timestamp }} 
+        # docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
