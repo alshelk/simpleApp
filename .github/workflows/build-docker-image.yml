@@ -14,8 +14,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      with:
+        fallback: v1.0.0 
+   
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:0.1.0 --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+      run: docker build . --file Dockerfile --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-$(date +%s) --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
     - name: Docker list image
       run: docker image ls
@@ -25,5 +32,5 @@ jobs:
 
     - name: Publish image
       run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:0.1.0 
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${{ steps.previoustag.outputs.tag }}-$(date +%s)
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
