@@ -27,6 +27,8 @@ jobs:
     - name: Deploy
       if: startsWith(github.ref, 'refs/tags/v')    
       run: |
+        apt install go
+        apt install golang
         git clone https://github.com/splunk/qbec.git
         cd qbec
         make install  
@@ -34,4 +36,18 @@ jobs:
         qbec apply default
 
       # if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-
+# jobs:
+#   container-test-job:
+#     runs-on: ubuntu-latest
+#     container:
+#       image: node:18
+#       env:
+#         NODE_ENV: development
+#       ports:
+#         - 80
+#       volumes:
+#         - my_docker_volume:/volume_mount
+#       options: --cpus 1
+#     steps:
+#       - name: Check for dockerenv file
+#         run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
