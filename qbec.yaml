@@ -6,5 +6,5 @@ spec:
   environments:
     default:
       defaultNamespace: app
-      server: https://51.250.91.97:6443
+      server: https://62.84.115.143:6443
   vars: {}
