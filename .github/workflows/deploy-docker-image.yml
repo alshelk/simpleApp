@@ -32,6 +32,7 @@ jobs:
       run: |
         mkdir ~/.ssh
         echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
         mkdir ~/.kube
         scp ubuntu@${K8S_SERVER}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
         cat ~/.kube/config
