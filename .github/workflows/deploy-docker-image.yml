@@ -29,7 +29,8 @@ jobs:
       env:
         KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
       run: |
-        echo $KUBE_CONFIG &gt;&gt; ~/.kube/config
+        mkdir ~/.kube
+        echo $KUBE_CONFIG > ~/.kube/config
         QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  && chmod +x /usr/local/bin/kubectl
         HELM_VER=3.9.0  && wget -O- https://get.helm.sh/helm-v${HELM_VER}-linux-amd64.tar.gz | tar -C /tmp -zxf -  && mv /tmp/linux-amd64/helm /usr/local/bin/helm
