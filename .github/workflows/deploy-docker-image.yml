@@ -24,6 +24,15 @@ jobs:
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
+      - name: Deploy
+      # if: startsWith(github.ref, 'refs/tags/v')    
+      env:
+        PRIVATE_KEY : ${{ secrets.K8S_PRIVATE_KEY }}
+        K8S_SERVER : ${{ vars.K8S_SERVER }}
+      run: |
+        mkdir ~/.ssh
+        echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
+
     - name: Deploy
       # if: startsWith(github.ref, 'refs/tags/v')    
       env:
@@ -32,11 +41,11 @@ jobs:
       run: |
         mkdir ~/.ssh
         echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
-        cat ~/.ssh/id_rsa
+        echo $(cat ~/.ssh/id_rsa)
         chmod 600 ~/.ssh/id_rsa
         mkdir ~/.kube
         scp ubuntu@${K8S_SERVER}:~/.kube/config ~/.kube/config
-        cat ~/.kube/config
+        echo $(cat ~/.kube/config)
         sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
         QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  && chmod +x /usr/local/bin/kubectl
