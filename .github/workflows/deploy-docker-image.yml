@@ -31,7 +31,7 @@ jobs:
         K8S_SERVER : ${{ vars.K8S_SERVER }}
       run: |
         mkdir ~/.ssh
-        echo $PRIVATE_KEY > ./~ssh/id_rsa
+        echo $PRIVATE_KEY > ~/.ssh/id_rsa
         mkdir ~/.kube
         scp ubuntu@$K8S_SERVER:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/$K8S_SERVER/' ~/.kube/config
         QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
