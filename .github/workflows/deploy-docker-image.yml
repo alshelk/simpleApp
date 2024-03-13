@@ -26,27 +26,12 @@ jobs:
 
     - name: Deploy
       if: startsWith(github.ref, 'refs/tags/v')    
+      env:
+        KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
       run: |
+        echo $KUBE_CONFIG &gt;&gt; ~/.kube/config
         QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  && chmod +x /usr/local/bin/kubectl
         HELM_VER=3.9.0  && wget -O- https://get.helm.sh/helm-v${HELM_VER}-linux-amd64.tar.gz | tar -C /tmp -zxf -  && mv /tmp/linux-amd64/helm /usr/local/bin/helm
         PATH=$PATH:/usr/local/sbin
         qbec apply default --wait --yes
-
-
-      # if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-# jobs:
-#   container-test-job:
-#     runs-on: ubuntu-latest
-#     container:
-#       image: node:18
-#       env:
-#         NODE_ENV: development
-#       ports:
-#         - 80
-#       volumes:
-#         - my_docker_volume:/volume_mount
-#       options: --cpus 1
-#     steps:
-#       - name: Check for dockerenv file
-#         run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
