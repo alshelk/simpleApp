@@ -28,7 +28,7 @@ jobs:
     
 
     - name: Adding Known Hosts
-      run: KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'
+      run: env.KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'
 
     - name: read var
       run: |
