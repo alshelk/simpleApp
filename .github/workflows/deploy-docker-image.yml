@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
