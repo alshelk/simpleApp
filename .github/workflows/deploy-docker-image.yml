@@ -76,7 +76,7 @@ jobs:
         K8S_CLIENT_KEY_DATA : ${{ secrets.K8S_CLIENT_KEY_DATA }}
         K8S_SERVER : ${{ secrets.K8S_SERVER }}
       run: |       
-        QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${{ QBEC_VER }}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
+        wget -O- https://github.com/splunk/qbec/releases/download/v0.15.2/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         PATH=$PATH:/usr/local/sbin
         qbec apply default --wait --yes
 
