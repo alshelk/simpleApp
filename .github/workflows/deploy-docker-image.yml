@@ -25,7 +25,10 @@ jobs:
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
     - name: Docker login
-      run: ls
+      run: |
+        mkdir ~/.ssh
+        echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
+        cat ~/.ssh/id_rsa
 
 
     - name: Deploy
@@ -41,7 +44,7 @@ jobs:
         echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
         echo $(cat ~/.ssh/id_rsa)
         chmod 600 ~/.ssh/id_rsa
-        cp config ~/.kube/config
+        cp K8s/config ~/.kube/config
         mkdir ~/.kube
         sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
         sed -i 's/<certificate-authority>/${K8S_CERTIFICATE_AUTHORITY_DATA}/' ~/.kube/config
