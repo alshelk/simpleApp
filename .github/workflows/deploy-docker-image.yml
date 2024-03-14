@@ -35,7 +35,7 @@ jobs:
         mkdir ~/.kube
         cp K8s/config ~/.kube/config
         sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
-        sed -i 's/<certificate-authority>/${K8S_CERTIFICATE_AUTHORITY_DATA}/' ~/.kube/config
+        sed -i 's/<certificate-authority>/$K8S_CERTIFICATE_AUTHORITY_DATA/' ~/.kube/config
         sed -i 's/<client-certificate>/${K8S_CLIENT_CERTIFICATE_DATA}/' ~/.kube/config
         sed -i 's/<client-key>/${K8S_CLIENT_KEY_DATA}/' ~/.kube/config
 
