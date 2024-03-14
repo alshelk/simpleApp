@@ -45,14 +45,16 @@ jobs:
     #     echo "${{ PRIVATE_KEY }}" > ~/.ssh/id_rsa
     #     chmod 600 ~/.ssh/id_rsa
 
-    # - name: Dep
-    #   run: cat ~/.ssh/id_rsa
+    - name: Dep
+      run: cat ~/.ssh/id_rsa
 
+    - name: Dep
+      run: ls -la ~/.ssh/
          
     - name: Docker login
       run: |    
         mkdir ~/.kube
-        scp ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
+        scp -i ~/.ssh/id_rsa ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
 
     # - name: Docker login
     #   run: |    
