@@ -24,12 +24,20 @@ jobs:
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
-    - name: Docker login
-      run: |
-        mkdir ~/.ssh
-        echo $PRIVATE_KEY > ~/.ssh/id_rsa
-        
-        # chmod 600 ~/.ssh/id_rsa
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.PRIVATE_KEY }}
+
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.K8S_SERVER }} >> ~/.ssh/known_hosts    
+      
+    # - name: Docker login
+    #   run: |
+    #     mkdir ~/.ssh
+    #     echo "${{ PRIVATE_KEY }}" > ~/.ssh/id_rsa
+    #     chmod 600 ~/.ssh/id_rsa
 
     - name: Dep
       run: cat ~/.ssh/id_rsa
