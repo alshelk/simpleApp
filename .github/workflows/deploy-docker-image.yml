@@ -25,8 +25,10 @@ jobs:
         docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
 
+    
+
     - name: Adding Known Hosts
-      run: echo "KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'" >> $GITHub_ENV 
+      run: KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'
 
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
@@ -45,6 +47,15 @@ jobs:
 
     - name: Dep
       run: cat ~/.ssh/id_rsa
+
+    - name: "Upload repo to VPS"
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.K8S_SERVER }}
+        username: ubuntu
+        key: ${{ secrets.PRIVATE_KEY }}
+        script:
+          scp ${env.username}@${env.host}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${env.host}/' ~/.kube/config
 
     - name: Docker login
       run: |    
