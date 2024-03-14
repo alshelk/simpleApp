@@ -28,7 +28,7 @@ jobs:
     
 
     - name: Adding Known Hosts
-      run: echo "KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'" >> $GITHub_ENV 
+      run: echo "KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'" >> $GITHUB_ENV 
 
     - name: read var
       run: |
