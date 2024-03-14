@@ -28,9 +28,7 @@ jobs:
       run: |
         mkdir ~/.ssh
         echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
-    - name: Docker login
-      run: cat ~/.ssh/id_rsa
-
+        chmod 600 ~/.ssh/id_rsa
 
     - name: Deploy
       # if: startsWith(github.ref, 'refs/tags/v')    
@@ -40,10 +38,9 @@ jobs:
         K8S_CLIENT_CERTIFICATE_DATA : ${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}
         K8S_CLIENT_KEY_DATA : ${{ secrets.K8S_CLIENT_KEY_DATA }}
         K8S_SERVER : ${{ vars.K8S_SERVER }}
-      run: |
-        chmod 600 ~/.ssh/id_rsa
-        cp K8s/config ~/.kube/config
+      run: |       
         mkdir ~/.kube
+        cp K8s/config ~/.kube/config
         sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
         sed -i 's/<certificate-authority>/${K8S_CERTIFICATE_AUTHORITY_DATA}/' ~/.kube/config
         sed -i 's/<client-certificate>/${K8S_CLIENT_CERTIFICATE_DATA}/' ~/.kube/config
