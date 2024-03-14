@@ -59,6 +59,7 @@ jobs:
         sed -i 's/<certificate-authority>/${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}/' ~/.kube/config
         sed -i 's/<client-certificate>/${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}/' ~/.kube/config
         sed -i 's/<client-key>/${{ secrets.K8S_CLIENT_KEY_DATA }}/' ~/.kube/config
+        sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' qbec.yaml
 
     - name: Dep
       run: ls ~/.kube
