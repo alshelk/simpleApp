@@ -39,11 +39,11 @@ jobs:
         sed -i 's/<client-certificate>/${K8S_CLIENT_CERTIFICATE_DATA}/' ~/.kube/config
         sed -i 's/<client-key>/${K8S_CLIENT_KEY_DATA}/' ~/.kube/config
 
-   - name: Dep
-     run: ls ~/.kube
+    - name: Dep
+      run: ls ~/.kube
 
-   - name: Dep
-     run: cat ~/.kube/config
+    - name: Dep
+      run: cat ~/.kube/config
 
     - name: Deploy
       # if: startsWith(github.ref, 'refs/tags/v')    
