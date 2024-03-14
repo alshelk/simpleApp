@@ -13,16 +13,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
       
-    # - name: Docker login
-    #   run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+    - name: Docker login
+      run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
 
-    # - name: Publish image
-    #   run: | 
-    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
-    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    - name: Publish image
+      run: | 
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
+        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
 
     
@@ -74,7 +74,7 @@ jobs:
         K8S_CERTIFICATE_AUTHORITY_DATA : ${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}
         K8S_CLIENT_CERTIFICATE_DATA : ${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}
         K8S_CLIENT_KEY_DATA : ${{ secrets.K8S_CLIENT_KEY_DATA }}
-        K8S_SERVER : ${{ vars.K8S_SERVER }}
+        K8S_SERVER : ${{ secrets.K8S_SERVER }}
       run: |       
         QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         PATH=$PATH:/usr/local/sbin
