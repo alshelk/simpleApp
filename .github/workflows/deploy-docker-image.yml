@@ -28,7 +28,8 @@ jobs:
       run: |
         mkdir ~/.ssh
         echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
-        cat ~/.ssh/id_rsa
+    - name: Docker login
+      run: cat ~/.ssh/id_rsa
 
 
     - name: Deploy
@@ -40,9 +41,6 @@ jobs:
         K8S_CLIENT_KEY_DATA : ${{ secrets.K8S_CLIENT_KEY_DATA }}
         K8S_SERVER : ${{ vars.K8S_SERVER }}
       run: |
-        mkdir ~/.ssh
-        echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
-        echo $(cat ~/.ssh/id_rsa)
         chmod 600 ~/.ssh/id_rsa
         cp K8s/config ~/.kube/config
         mkdir ~/.kube
