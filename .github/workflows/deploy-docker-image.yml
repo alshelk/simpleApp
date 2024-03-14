@@ -13,22 +13,26 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
       
-    - name: Docker login
-      run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+    # - name: Docker login
+    #   run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
 
-    - name: Publish image
-      run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    # - name: Publish image
+    #   run: | 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
 
     
 
     - name: Adding Known Hosts
       run: KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'
+
+    - name: read var
+      run: |
+        echo "Calling var from env using env context: server ip is ${{ env.KNOWN_HOSTS }}"
 
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
