@@ -11,18 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
-      
-    - name: Docker login
-      run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+    - uses: actions/checkout@v4
 
-    - name: Publish image
-      run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    - uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.K8S_PRIVATE_KEY }}
+    
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+      
+    # - name: Docker login
+    #   run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+
+    # - name: Publish image
+    #   run: | 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
 
 
     
@@ -46,20 +50,20 @@ jobs:
     #     chmod 600 ~/.ssh/id_rsa
 
         
-    # - name: Docker login
-    #   run: |    
-    #     mkdir ~/.kube
-    #     scp -i ~/.ssh/id_rsa ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
-
     - name: Docker login
       run: |    
-        mkdir ~/.kube        
-        cp K8s/config ~/.kube/config
-        sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
-        sed -i 's/<certificate-authority>/${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}/' ~/.kube/config
-        sed -i 's/<client-certificate>/${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}/' ~/.kube/config
-        sed -i 's/<client-key>/${{ secrets.K8S_CLIENT_KEY_DATA }}/' ~/.kube/config
-        sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' qbec.yaml
+        mkdir ~/.kube
+        scp -i ~/.ssh/id_rsa ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
+
+    # - name: Docker login
+    #   run: |    
+    #     mkdir ~/.kube        
+    #     cp K8s/config ~/.kube/config
+    #     sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
+    #     sed -i 's/<certificate-authority>/${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}/' ~/.kube/config
+    #     sed -i 's/<client-certificate>/${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}/' ~/.kube/config
+    #     sed -i 's/<client-key>/${{ secrets.K8S_CLIENT_KEY_DATA }}/' ~/.kube/config
+    #     sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' qbec.yaml
 
     - name: Dep
       run: ls ~/.kube
