@@ -53,7 +53,7 @@ jobs:
     - name: Docker login
       run: |    
         mkdir ~/.kube
-        scp -i ~/.ssh/id_rsa ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
+        scp ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
 
     # - name: Docker login
     #   run: |    
