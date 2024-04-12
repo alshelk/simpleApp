@@ -5,7 +5,7 @@ local base = import './base.libsonnet';
 base {
   components +: {
     myapp +: {
-      image: 'cr.yandex/crpjresmdt6bvu99mm57/my_app:latest',
+      image: 'cr.yandex/crp7lguopi1pjrhap18j/my_app:latest',
       replicas: 2,
       registry: 'ycregistry',
     },

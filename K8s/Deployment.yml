@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+        image: cr.yandex/crp7lguopi1pjrhap18j/my_app:latest
         ports:
           - containerPort: 80
       imagePullSecrets:
