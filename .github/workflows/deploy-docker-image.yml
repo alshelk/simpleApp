@@ -11,44 +11,79 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+
+    - uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.K8S_PRIVATE_KEY }}
     
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --pull --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} --tag cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
       
+    # - name: Docker login
+    #   run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+
+    # - name: Publish image
+    #   run: | 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
+    #     docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+
+
+    
+
+    # - name: Adding Known Hosts
+    #   run: echo "KNOWN_HOSTS='$(ssh-keyscan -H ${{ secrets.K8S_SERVER }})'" >> $GITHUB_ENV 
+
+    # - name: Install SSH Key
+    #   uses: shimataro/ssh-key-action@v2
+    #   with:
+    #     key: ${{ secrets.PRIVATE_KEY }}
+    #     known_hosts: ${{ env.KNOWN_HOSTS }}
+
+    # - name: Adding Known Hosts
+    #   run: ssh-keyscan -H ${{ secrets.K8S_SERVER }} > ~/.ssh/known_hosts    
+      
+    # - name: Docker login
+    #   run: |
+    #     mkdir ~/.ssh
+    #     echo "${{ PRIVATE_KEY }}" > ~/.ssh/id_rsa
+    #     chmod 600 ~/.ssh/id_rsa
+
+        
     - name: Docker login
-      run: docker login --username oauth --password ${{ secrets.YC_SERVICE_ACCOUNT }}  cr.yandex
+      run: |    
+        mkdir ~/.kube
+        scp ubuntu@${{ secrets.K8S_SERVER }}:~/.kube/config ~/.kube/config && sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
 
-    - name: Publish image
-      run: | 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:${GITHUB_REF##*/} 
-        docker push cr.yandex/crpjresmdt6bvu99mm57/my_app:latest
+    # - name: Docker login
+    #   run: |    
+    #     mkdir ~/.kube        
+    #     cp K8s/config ~/.kube/config
+    #     sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' ~/.kube/config
+    #     sed -i 's/<certificate-authority>/${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}/' ~/.kube/config
+    #     sed -i 's/<client-certificate>/${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}/' ~/.kube/config
+    #     sed -i 's/<client-key>/${{ secrets.K8S_CLIENT_KEY_DATA }}/' ~/.kube/config
+    #     sed -i 's/127.0.0.1/${{ secrets.K8S_SERVER }}/' qbec.yaml
 
-      - name: Deploy
-      # if: startsWith(github.ref, 'refs/tags/v')    
-      env:
-        PRIVATE_KEY : ${{ secrets.K8S_PRIVATE_KEY }}
-        K8S_SERVER : ${{ vars.K8S_SERVER }}
-      run: |
-        mkdir ~/.ssh
-        echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
+    - name: Dep
+      run: ls ~/.kube
+
+    - name: Dep
+      run: cat ~/.kube/config
 
     - name: Deploy
       # if: startsWith(github.ref, 'refs/tags/v')    
       env:
         PRIVATE_KEY : ${{ secrets.K8S_PRIVATE_KEY }}
-        K8S_SERVER : ${{ vars.K8S_SERVER }}
-      run: |
-        mkdir ~/.ssh
-        echo ${PRIVATE_KEY} > ~/.ssh/id_rsa
-        echo $(cat ~/.ssh/id_rsa)
-        chmod 600 ~/.ssh/id_rsa
-        mkdir ~/.kube
-        scp ubuntu@${K8S_SERVER}:~/.kube/config ~/.kube/config
-        echo $(cat ~/.kube/config)
-        sed -i 's/127.0.0.1/${K8S_SERVER}/' ~/.kube/config
-        QBEC_VER=0.15.2  && wget -O- https://github.com/splunk/qbec/releases/download/v${QBEC_VER}/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
-        wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  && chmod +x /usr/local/bin/kubectl
-        HELM_VER=3.9.0  && wget -O- https://get.helm.sh/helm-v${HELM_VER}-linux-amd64.tar.gz | tar -C /tmp -zxf -  && mv /tmp/linux-amd64/helm /usr/local/bin/helm
+        K8S_CERTIFICATE_AUTHORITY_DATA : ${{ secrets.K8S_CERTIFICATE_AUTHORITY_DATA }}
+        K8S_CLIENT_CERTIFICATE_DATA : ${{ secrets.K8S_CLIENT_CERTIFICATE_DATA }}
+        K8S_CLIENT_KEY_DATA : ${{ secrets.K8S_CLIENT_KEY_DATA }}
+        K8S_SERVER : ${{ secrets.K8S_SERVER }}
+      run: |       
+        wget -O- https://github.com/splunk/qbec/releases/download/v0.15.2/qbec-linux-amd64.tar.gz | tar -C /tmp -xzf -  && mv /tmp/qbec /tmp/jsonnet-qbec /usr/local/bin/
         PATH=$PATH:/usr/local/sbin
         qbec apply default --wait --yes
+
+
+        # wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  && chmod +x /usr/local/bin/kubectl
+        # HELM_VER=3.9.0  && wget -O- https://get.helm.sh/helm-v${HELM_VER}-linux-amd64.tar.gz | tar -C /tmp -zxf -  && mv /tmp/linux-amd64/helm /usr/local/bin/helm
